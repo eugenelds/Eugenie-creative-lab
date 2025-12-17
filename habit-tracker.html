@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mini Habit Tracker</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #fce7f3, #e0f2fe);
+      color: #111827;
+    }
+
+    .app {
+      width: min(900px, 95vw);
+      background: #ffffffdd;
+      border-radius: 24px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+      padding: 24px 28px 28px;
+      backdrop-filter: blur(10px);
+    }
+
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      gap: 12px;
+    }
+
+    .title-block h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .title-block h1 span.emoji {
+      font-size: 1.8rem;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .today {
+      text-align: right;
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+
+    .today span.date-pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #eff6ff;
+      font-weight: 500;
+      border: 1px solid #bfdbfe;
+    }
+
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .lang-switch span.label {
+      font-weight: 500;
+    }
+
+    .lang-btn {
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+        transform 0.08s ease;
+    }
+
+    .lang-btn:hover {
+      background: #eff6ff;
+      transform: translateY(-1px);
+    }
+
+    .lang-btn.active {
+      background: #1d4ed8;
+      color: white;
+      border-color: #1d4ed8;
+    }
+
+    .edit-habits-btn {
+      border: none;
+      background: #eef2ff;
+      color: #4338ca;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.08s ease;
+    }
+
+    .edit-habits-btn:hover {
+      background: #e0e7ff;
+      transform: translateY(-1px);
+    }
+
+    /* Onboarding panel */
+    #onboarding-panel {
+      margin-top: 10px;
+      padding: 18px 18px 20px;
+      border-radius: 18px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+    }
+
+    .ob-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-size: 1rem;
+    }
+
+    .ob-desc {
+      font-size: 0.86rem;
+      color: #6b7280;
+      margin-bottom: 14px;
+    }
+
+    .ob-form {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    @media (max-width: 720px) {
+      .ob-form {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .ob-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.85rem;
+    }
+
+    .ob-label {
+      font-weight: 500;
+      color: #4b5563;
+    }
+
+    .ob-input {
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      padding: 7px 9px;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .ob-input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px #bfdbfe;
+    }
+
+    .ob-actions {
+      margin-top: 14px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .ob-start-btn {
+      border: none;
+      border-radius: 999px;
+      background: #22c55e;
+      color: white;
+      font-size: 0.9rem;
+      padding: 7px 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
+    }
+
+    .ob-start-btn:hover {
+      background: #16a34a;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(22, 163, 74, 0.25);
+    }
+
+    .ob-start-btn span.icon {
+      font-size: 1rem;
+    }
+
+    /* Tracker panel */
+    #tracker-panel {
+      margin-top: 14px;
+    }
+
+    .habit-card {
+      border-radius: 18px;
+      border: 1px solid #e5e7eb;
+      overflow: hidden;
+    }
+
+    .habit-header-row,
+    .habit-row {
+      display: grid;
+      grid-template-columns: 2.2fr repeat(7, 1fr);
+    }
+
+    .cell {
+      padding: 10px 8px;
+      font-size: 0.9rem;
+      text-align: center;
+      border-bottom: 1px solid #f3f4f6;
+      border-right: 1px solid #f3f4f6;
+      user-select: none;
+    }
+
+    .habit-header-row .cell {
+      background: #f9fafb;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #6b7280;
+    }
+
+    .habit-header-row .cell.habit-name-header {
+      text-align: left;
+      padding-left: 14px;
+    }
+
+    .habit-row .habit-name {
+      text-align: left;
+      font-weight: 600;
+      padding-left: 14px;
+      font-size: 0.95rem;
+      background: #fdfdfd;
+    }
+
+    .habit-row:nth-child(even) .habit-name {
+      background: #f9fafb;
+    }
+
+    .habit-row .day-cell {
+      cursor: pointer;
+      position: relative;
+      transition: background 0.15s ease, transform 0.08s ease;
+    }
+
+    .habit-row .day-cell:hover {
+      background: #eff6ff;
+      transform: translateY(-1px);
+    }
+
+    .habit-row .day-cell.done {
+      background: #d1fae5;
+      color: #047857;
+      font-weight: 600;
+      box-shadow: inset 0 0 0 1px #6ee7b7;
+    }
+
+    .habit-row .day-cell.done::after {
+      content: "✓";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .habit-row .day-cell.today-col {
+      box-shadow: inset 0 0 0 1px #bfdbfe;
+    }
+
+    .habit-row .day-cell.today-col.done {
+      box-shadow: inset 0 0 0 1px #22c55e;
+    }
+
+    .habit-header-row .cell.today-col {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .habit-row:last-child .cell {
+      border-bottom: none;
+    }
+
+    .habit-row .cell:last-child,
+    .habit-header-row .cell:last-child {
+      border-right: none;
+    }
+
+    .bottom-panel {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 720px) {
+      .bottom-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .app-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .right-panel {
+        align-items: flex-start;
+      }
+    }
+
+    .progress-card {
+      padding: 14px 16px 16px;
+      border-radius: 18px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+    }
+
+    .progress-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+    }
+
+    .progress-title span.label {
+      font-weight: 600;
+    }
+
+    .progress-title span.percent {
+      font-weight: 600;
+      color: #16a34a;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      position: absolute;
+      inset: 0;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #22c55e, #16a34a);
+      transition: width 0.25s ease-out;
+    }
+
+    .progress-caption {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 6px;
+    }
+
+    .quote-card {
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid #e5e7eb;
+      background: #fefce8;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quote-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #854d0e;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .quote-text {
+      font-size: 0.88rem;
+      color: #78350f;
+    }
+
+    .quote-refresh {
+      align-self: flex-start;
+      margin-top: 4px;
+      font-size: 0.78rem;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #f97316;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.15s ease, transform 0.08s ease;
+    }
+
+    .quote-refresh:hover {
+      background: #ea580c;
+      transform: translateY(-1px);
+    }
+
+    .bottom-actions {
+      margin-top: 10px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .reset-btn {
+      border: none;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      border-radius: 999px;
+      background: #fee2e2;
+      color: #b91c1c;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s ease, transform 0.08s ease;
+    }
+
+    .reset-btn:hover {
+      background: #fecaca;
+      transform: translateY(-1px);
+    }
+
+    .reset-btn span.icon {
+      font-size: 0.9rem;
+    }
+
+    /* Simple hidden helper */
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="top-nav">
+      <!-- href 안의 파일 이름을 네 scratch page 파일 이름으로 바꿔줘! -->
+      <a href="creative-lab.html" class="scratch-link">
+        ← Back to Creative Lab
+      </a>
+    </div>
+    <header class="app-header">
+      <div class="title-block">
+        <h1>
+          <span class="emoji">🌱</span>
+          <span id="t-title"></span>
+        </h1>
+        <p class="subtitle" id="t-subtitle"></p>
+      </div>
+      <div class="right-panel">
+        <div class="today">
+          <div id="t-today-word"></div>
+          <span class="date-pill" id="today-label"></span>
+        </div>
+        <div class="lang-switch">
+          <span class="label" id="t-lang-label"></span>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+          <button type="button" class="lang-btn" data-lang="ko">한국어</button>
+        </div>
+        <button type="button" class="edit-habits-btn" id="edit-habits-btn">
+          ✏️ <span id="t-edit-habits"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Onboarding: language already here, now user inputs habit names -->
+    <section id="onboarding-panel">
+      <div class="ob-title" id="ob-title"></div>
+      <div class="ob-desc" id="ob-desc"></div>
+      <div class="ob-form">
+        <div class="ob-field">
+          <label class="ob-label" for="ob-input-1" id="ob-label-1"></label>
+          <input class="ob-input" id="ob-input-1" type="text" />
+        </div>
+        <div class="ob-field">
+          <label class="ob-label" for="ob-input-2" id="ob-label-2"></label>
+          <input class="ob-input" id="ob-input-2" type="text" />
+        </div>
+        <div class="ob-field">
+          <label class="ob-label" for="ob-input-3" id="ob-label-3"></label>
+          <input class="ob-input" id="ob-input-3" type="text" />
+        </div>
+      </div>
+      <div class="ob-actions">
+        <button type="button" class="ob-start-btn" id="ob-start-btn">
+          <span id="ob-start-text"></span>
+          <span class="icon">→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Main tracker -->
+    <section id="tracker-panel" class="hidden">
+      <section class="habit-card">
+        <div class="habit-header-row">
+          <div class="cell habit-name-header" id="t-habit-header"></div>
+          <div class="cell day-header" data-day-index="0"></div>
+          <div class="cell day-header" data-day-index="1"></div>
+          <div class="cell day-header" data-day-index="2"></div>
+          <div class="cell day-header" data-day-index="3"></div>
+          <div class="cell day-header" data-day-index="4"></div>
+          <div class="cell day-header" data-day-index="5"></div>
+          <div class="cell day-header" data-day-index="6"></div>
+        </div>
+
+        <!-- Habit 1 -->
+        <div class="habit-row" data-habit-id="h1">
+          <div class="cell habit-name" data-habit-key="0"></div>
+          <div class="cell day-cell" data-day-index="0"></div>
+          <div class="cell day-cell" data-day-index="1"></div>
+          <div class="cell day-cell" data-day-index="2"></div>
+          <div class="cell day-cell" data-day-index="3"></div>
+          <div class="cell day-cell" data-day-index="4"></div>
+          <div class="cell day-cell" data-day-index="5"></div>
+          <div class="cell day-cell" data-day-index="6"></div>
+        </div>
+
+        <!-- Habit 2 -->
+        <div class="habit-row" data-habit-id="h2">
+          <div class="cell habit-name" data-habit-key="1"></div>
+          <div class="cell day-cell" data-day-index="0"></div>
+          <div class="cell day-cell" data-day-index="1"></div>
+          <div class="cell day-cell" data-day-index="2"></div>
+          <div class="cell day-cell" data-day-index="3"></div>
+          <div class="cell day-cell" data-day-index="4"></div>
+          <div class="cell day-cell" data-day-index="5"></div>
+          <div class="cell day-cell" data-day-index="6"></div>
+        </div>
+
+        <!-- Habit 3 -->
+        <div class="habit-row" data-habit-id="h3">
+          <div class="cell habit-name" data-habit-key="2"></div>
+          <div class="cell day-cell" data-day-index="0"></div>
+          <div class="cell day-cell" data-day-index="1"></div>
+          <div class="cell day-cell" data-day-index="2"></div>
+          <div class="cell day-cell" data-day-index="3"></div>
+          <div class="cell day-cell" data-day-index="4"></div>
+          <div class="cell day-cell" data-day-index="5"></div>
+          <div class="cell day-cell" data-day-index="6"></div>
+        </div>
+      </section>
+
+      <div class="bottom-panel">
+        <div class="progress-card">
+          <div class="progress-title">
+            <span class="label" id="t-progress-title"></span>
+            <span class="percent" id="progress-percent">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <div class="progress-caption" id="progress-caption"></div>
+          <div class="bottom-actions">
+            <button class="reset-btn" id="reset-week">
+              <span class="icon">↺</span>
+              <span id="t-reset-btn"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="quote-card">
+          <div class="quote-title">
+            <span id="t-quote-title"></span>
+          </div>
+          <div class="quote-text" id="quote-text"></div>
+          <button class="quote-refresh" id="quote-refresh">
+            <span id="t-quote-btn"></span> <span>🔁</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const HABIT_IDS = ["h1", "h2", "h3"];
+    let currentLang = localStorage.getItem("habitTracker_lang") || "en";
+    let habitNames = null; // {h1: "...", h2: "...", h3: "..."}
+
+    const I18N = {
+      en: {
+        title: "Weekly Habit Tracker",
+        subtitle: "Track 3 tiny habits for this week. Click the boxes to check off your progress.",
+        todayWord: "Today",
+        langLabel: "Language",
+        editHabits: "Edit habit names",
+        habitHeader: "Habit",
+        daysShort: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        defaultHabits: ["Drink 8 cups of water", "Study 30 minutes", "Sleep before midnight"],
+        progressTitle: "Weekly progress",
+        progressMessages: {
+          empty: "Let’s start with just one box today 💪",
+          low: "Nice! Keep going — small wins add up 🌱",
+          mid: "You’re building real momentum. Proud of you 🙌",
+          high: "Wow. This is what consistency looks like. 🔥"
+        },
+        resetBtn: "Reset this week",
+        quoteTitle: "✨ Tiny habit quote",
+        quoteButton: "New quote",
+        // Onboarding
+        setupTitle: "Set up your habits",
+        setupDesc: "Write 3 small habits you want to track this week. You can always edit them later.",
+        setupLabels: ["Habit 1", "Habit 2", "Habit 3"],
+        setupButton: "Start tracking"
+      },
+      ko: {
+        title: "주간 습관 트래커",
+        subtitle: "이번 주에 관리할 작은 습관 3가지를 적어 두고, 하루에 한 번씩 체크해 보세요.",
+        todayWord: "오늘",
+        langLabel: "언어",
+        editHabits: "습관 이름 수정",
+        habitHeader: "습관",
+        daysShort: ["월", "화", "수", "목", "금", "토", "일"],
+        defaultHabits: ["물 8컵 마시기", "30분 공부하기", "자정 전에 잠들기"],
+        progressTitle: "이번 주 진행 상황",
+        progressMessages: {
+          empty: "오늘은 칸 하나만 채워도 충분해요 💪",
+          low: "좋아요! 계속하면 작은 성공들이 쌓여요 🌱",
+          mid: "점점 리듬을 만들고 있어요. 잘 하고 있어요 🙌",
+          high: "놀라워요. 이게 바로 꾸준함의 힘이에요 🔥"
+        },
+        resetBtn: "이번 주 기록 초기화",
+        quoteTitle: "✨ 작은 습관 한 마디",
+        quoteButton: "다른 문장 보기",
+        // Onboarding
+        setupTitle: "추적할 습관을 입력하세요",
+        setupDesc: "이번 주에 기록하고 싶은 작은 습관 3가지를 적어 보세요. 나중에 언제든지 다시 수정할 수 있어요.",
+        setupLabels: ["습관 1", "습관 2", "습관 3"],
+        setupButton: "시작하기"
+      }
+    };
+
+    const QUOTES = {
+      en: [
+        "Small steps every day become big changes over time.",
+        "You don’t need to be perfect, just consistent.",
+        "Today’s 1% effort still counts. 💫",
+        "Discipline is just choosing what you want most over what you want now.",
+        "Missing one day doesn’t ruin your progress. Start again now.",
+        "Tiny habits change your identity before they change your results.",
+        "You showed up. That’s already a win. 🌟"
+      ],
+      ko: [
+        "매일의 작은 걸음이 시간이 지나 큰 변화를 만듭니다.",
+        "완벽할 필요 없어요. 꾸준하면 돼요.",
+        "오늘의 1% 노력도 충분히 의미 있어요 💫",
+        "규율은 지금 원하는 것보다 가장 원하는 것을 선택하는 힘입니다.",
+        "하루 빠졌다고 해서 모든 노력이 사라지진 않아요. 지금 다시 시작하면 됩니다.",
+        "작은 습관이 먼저 나를 바꾸고, 그다음에 결과를 바꿉니다.",
+        "오늘도 해보려고 왔다는 것 자체가 이미 멋진 일입니다. 🌟"
+      ]
+    };
+
+    function randomQuote(lang = currentLang) {
+      const arr = QUOTES[lang] || QUOTES.en;
+      const idx = Math.floor(Math.random() * arr.length);
+      return arr[idx];
+    }
+
+    // Week / storage helpers
+    function getMondayOfCurrentWeek(date = new Date()) {
+      const d = new Date(date);
+      const day = d.getDay(); // 0: Sun, 1: Mon...
+      const diff = (day === 0 ? -6 : 1) - day; // move to Monday
+      d.setDate(d.getDate() + diff);
+      d.setHours(0, 0, 0, 0);
+      return d;
+    }
+
+    function getWeekKey() {
+      const monday = getMondayOfCurrentWeek();
+      return monday.toISOString().slice(0, 10); // YYYY-MM-DD
+    }
+
+    function storageKey(habitId, dayIndex) {
+      return `habitTracker_${getWeekKey()}_${habitId}_${dayIndex}`;
+    }
+
+    function formatTodayLabel() {
+      const today = new Date();
+      const locale = currentLang === "ko" ? "ko-KR" : undefined;
+      const options = { weekday: "long", month: "short", day: "numeric" };
+      return today.toLocaleDateString(locale, options);
+    }
+
+    function updateProgressUI() {
+      const cells = document.querySelectorAll(".day-cell");
+      const total = cells.length;
+      const done = document.querySelectorAll(".day-cell.done").length;
+      const percent = total === 0 ? 0 : Math.round((done / total) * 100);
+
+      const fill = document.getElementById("progress-fill");
+      const percentEl = document.getElementById("progress-percent");
+      const caption = document.getElementById("progress-caption");
+
+      fill.style.width = percent + "%";
+      percentEl.textContent = percent + "%";
+
+      const msgSet = I18N[currentLang].progressMessages;
+      if (percent === 0) {
+        caption.textContent = msgSet.empty;
+      } else if (percent < 40) {
+        caption.textContent = msgSet.low;
+      } else if (percent < 80) {
+        caption.textContent = msgSet.mid;
+      } else {
+        caption.textContent = msgSet.high;
+      }
+    }
+
+    function updateHabitNameCells() {
+      const t = I18N[currentLang];
+      const defaults = t.defaultHabits;
+      const cells = document.querySelectorAll(".habit-row .habit-name");
+      cells.forEach((cell) => {
+        const idx = Number(cell.dataset.habitKey);
+        const id = HABIT_IDS[idx];
+        const name =
+          (habitNames && habitNames[id]) ||
+          (defaults && defaults[idx]) ||
+          `Habit ${idx + 1}`;
+        cell.textContent = name;
+      });
+    }
+
+    function applyTranslations() {
+      const t = I18N[currentLang];
+
+      // Header
+      document.getElementById("t-title").textContent = t.title;
+      document.getElementById("t-subtitle").textContent = t.subtitle;
+      document.getElementById("t-today-word").textContent = t.todayWord;
+      document.getElementById("t-lang-label").textContent = t.langLabel;
+      document.getElementById("t-edit-habits").textContent = t.editHabits;
+
+      // Today label
+      document.getElementById("today-label").textContent = formatTodayLabel();
+
+      // Tracker labels
+      document.getElementById("t-habit-header").textContent = t.habitHeader;
+      const headerCells = document.querySelectorAll(".habit-header-row .cell.day-header");
+      headerCells.forEach((cell) => {
+        const i = Number(cell.dataset.dayIndex);
+        cell.textContent = t.daysShort[i];
+      });
+
+      document.getElementById("t-progress-title").textContent = t.progressTitle;
+      document.getElementById("t-reset-btn").textContent = t.resetBtn;
+      document.getElementById("t-quote-title").textContent = t.quoteTitle;
+      document.getElementById("t-quote-btn").textContent = t.quoteButton;
+
+      // Onboarding texts
+      document.getElementById("ob-title").textContent = t.setupTitle;
+      document.getElementById("ob-desc").textContent = t.setupDesc;
+      document.getElementById("ob-label-1").textContent = t.setupLabels[0];
+      document.getElementById("ob-label-2").textContent = t.setupLabels[1];
+      document.getElementById("ob-label-3").textContent = t.setupLabels[2];
+      document.getElementById("ob-start-text").textContent = t.setupButton;
+
+      // Only change placeholders (not values) so we don't erase what user typed
+      const defaults = t.defaultHabits;
+      document.getElementById("ob-input-1").placeholder = defaults[0];
+      document.getElementById("ob-input-2").placeholder = defaults[1];
+      document.getElementById("ob-input-3").placeholder = defaults[2];
+
+      // Habit names in tracker
+      updateHabitNameCells();
+
+      // Progress message language
+      updateProgressUI();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Load saved habit names if any
+      const saved = localStorage.getItem("habitTracker_habitNames");
+      if (saved) {
+        try {
+          habitNames = JSON.parse(saved);
+        } catch {
+          habitNames = null;
+        }
+      }
+
+      // Highlight today's column in table
+      const today = new Date();
+      const weekday = today.getDay(); // 0 Sun, 1 Mon...
+      let dayIndexForGrid = weekday === 0 ? 6 : weekday - 1;
+      const headerCells = document.querySelectorAll(".habit-header-row .cell.day-header");
+      headerCells.forEach((cell) => {
+        const i = Number(cell.dataset.dayIndex);
+        if (i === dayIndexForGrid) {
+          cell.classList.add("today-col");
+        }
+      });
+      const dayCells = document.querySelectorAll(".habit-row .day-cell");
+      dayCells.forEach((cell) => {
+        const dayIdx = Number(cell.dataset.dayIndex);
+        if (dayIdx === dayIndexForGrid) {
+          cell.classList.add("today-col");
+        }
+      });
+
+      // Restore checked cells from storage
+      HABIT_IDS.forEach((habitId) => {
+        const row = document.querySelector(`.habit-row[data-habit-id="${habitId}"]`);
+        if (!row) return;
+        const cells = row.querySelectorAll(".day-cell");
+        cells.forEach((cell) => {
+          const dayIdx = Number(cell.dataset.dayIndex);
+          const key = storageKey(habitId, dayIdx);
+          const stored = localStorage.getItem(key);
+          if (stored === "1") {
+            cell.classList.add("done");
+          }
+        });
+      });
+
+      // Click handling for day cells
+      document.querySelectorAll(".habit-row").forEach((row) => {
+        const habitId = row.dataset.habitId;
+        row.querySelectorAll(".day-cell").forEach((cell) => {
+          cell.addEventListener("click", () => {
+            const dayIdx = Number(cell.dataset.dayIndex);
+            const key = storageKey(habitId, dayIdx);
+            const isDone = cell.classList.toggle("done");
+            if (isDone) {
+              localStorage.setItem(key, "1");
+            } else {
+              localStorage.removeItem(key);
+            }
+            updateProgressUI();
+          });
+        });
+      });
+
+      // Language switching
+      const langButtons = document.querySelectorAll(".lang-btn");
+      function updateLangButtons() {
+        langButtons.forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.lang === currentLang);
+        });
+      }
+
+      langButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const lang = btn.dataset.lang;
+          if (lang === currentLang) return;
+          currentLang = lang;
+          localStorage.setItem("habitTracker_lang", currentLang);
+          updateLangButtons();
+          applyTranslations();
+          document.getElementById("quote-text").textContent = randomQuote(currentLang);
+        });
+      });
+
+      updateLangButtons();
+      applyTranslations();
+
+      // Quotes
+      const quoteText = document.getElementById("quote-text");
+      const quoteRefresh = document.getElementById("quote-refresh");
+      quoteText.textContent = randomQuote(currentLang);
+      quoteRefresh.addEventListener("click", () => {
+        quoteText.textContent = randomQuote(currentLang);
+      });
+
+      // Reset week button
+      const resetBtn = document.getElementById("reset-week");
+      resetBtn.addEventListener("click", () => {
+        const weekKey = getWeekKey();
+        Object.keys(localStorage).forEach((key) => {
+          if (key.startsWith(`habitTracker_${weekKey}_`)) {
+            localStorage.removeItem(key);
+          }
+        });
+        document.querySelectorAll(".day-cell.done").forEach((cell) => {
+          cell.classList.remove("done");
+        });
+        updateProgressUI();
+      });
+
+      // Onboarding logic
+      const onboardingPanel = document.getElementById("onboarding-panel");
+      const trackerPanel = document.getElementById("tracker-panel");
+      const input1 = document.getElementById("ob-input-1");
+      const input2 = document.getElementById("ob-input-2");
+      const input3 = document.getElementById("ob-input-3");
+      const startBtn = document.getElementById("ob-start-btn");
+      const editBtn = document.getElementById("edit-habits-btn");
+
+      function showTracker() {
+        onboardingPanel.classList.add("hidden");
+        trackerPanel.classList.remove("hidden");
+      }
+
+      function showOnboarding() {
+        onboardingPanel.classList.remove("hidden");
+        trackerPanel.classList.add("hidden");
+        // Prefill inputs with current habitNames if available
+        if (habitNames) {
+          input1.value = habitNames["h1"] || "";
+          input2.value = habitNames["h2"] || "";
+          input3.value = habitNames["h3"] || "";
+        } else {
+          input1.value = "";
+          input2.value = "";
+          input3.value = "";
+        }
+      }
+
+      // If we already have habit names saved, skip onboarding initially
+      if (habitNames) {
+        showTracker();
+      } else {
+        showOnboarding();
+      }
+
+      startBtn.addEventListener("click", () => {
+        const t = I18N[currentLang];
+        const defaults = t.defaultHabits;
+        const name1 = (input1.value || "").trim() || defaults[0];
+        const name2 = (input2.value || "").trim() || defaults[1];
+        const name3 = (input3.value || "").trim() || defaults[2];
+
+        habitNames = {
+          h1: name1,
+          h2: name2,
+          h3: name3
+        };
+        localStorage.setItem("habitTracker_habitNames", JSON.stringify(habitNames));
+        updateHabitNameCells();
+        showTracker();
+      });
+
+      editBtn.addEventListener("click", () => {
+        showOnboarding();
+      });
+
+      // Initial progress calc
+      updateProgressUI();
+    });
+  </script>
+</body>
+</html>

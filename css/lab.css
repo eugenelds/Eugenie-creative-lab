@@ -1,0 +1,211 @@
+/* 전체 페이지 기본 스타일 */
+body {
+    margin: 0;
+    font-family: "Fredoka", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background-color: #e8e4e3;
+}
+
+/* 바깥 레이아웃 */
+.page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+}
+
+/* 헤더 */
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.title-main {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #000000;
+    margin: 8px 0 4px;
+}
+
+.title-sub {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #b8b8b8; /* 파스텔 보라 */
+    margin: 0 0 10px;
+}
+
+.back-link a {
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.back-link a:hover {
+    text-decoration: underline;
+}
+
+/* 상단 내비게이션 */
+.lab-nav {
+    margin-bottom: 20px;
+    padding: 10px 16px;
+    background-color: #ffffff;
+    border-radius: 999px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.lab-nav ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.lab-nav a {
+    text-decoration: none;
+    color: #666;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background-color: #f3ebee;
+}
+
+.lab-nav a:hover {
+    background-color: #f36798;
+    color: #ffffff;
+}
+
+/* 공통 섹션 박스 */
+.section {
+    background-color: #ffffff;
+    padding: 20px 18px 22px;
+    margin-bottom: 18px;
+    border-radius: 18px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+}
+
+.section h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+/* 사진 그리드 */
+.photo-grid {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.photo-grid img {
+    width: 30%;
+    min-width: 140px;
+    border-radius: 12px;
+    object-fit: cover;
+    aspect-ratio: 4 / 3;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+
+/* footer */
+.footer {
+    text-align: center;
+    margin-top: 24px;
+}
+
+.footer a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 0.9rem;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 비율 */
+    height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    margin-top: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.section-viz {
+    background-color: #ffffff;
+    padding: 20px 20px 30px;
+    margin-top: 25px;
+    border-radius: 18px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+}
+
+/* 타블로 콘텐츠 전체를 카드 안에 예쁘게 정렬 */
+.viz-box {
+    max-width: 900px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.top-nav {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 8px;
+}
+
+.scratch-link {
+  font-size: 0.8rem;
+  color: #4b5563;
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s ease, transform 0.08s ease;
+}
+
+.scratch-link:hover {
+  background: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+.habit-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    margin-top: 6px;
+    background: #555555;
+    color: #d12e6a;
+    border: 2px solid #cfc8ca;
+    border-radius: 25px;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.9rem;
+    box-shadow: 0 3px 0 #c3babd;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.habit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 0 #c06a85;
+}
+
+.habit-btn:active {
+    transform: translateY(0px);
+    box-shadow: 0 3px 0 #ff94b6;
+}

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Eugenie’s Hobbies</title>
+
+    <!-- 키치한 느낌의 굵은 폰트: Fredoka (Google Fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/lab.css">
+</head>
+<body>
+
+    <!-- 페이지 맨 위 앵커 -->
+    <div id="top"></div>
+
+    <div class="page">
+
+        <!-- 헤더 -->
+        <header class="header">
+            <h1 class="title-main">My Hobbies !</h1>
+
+            <p class="back-link">
+                <a href="index.html">← Back to Home</a>
+            </p>
+            <p class="back-link">
+              <a href="habit-tracker.html" class="habit-btn">📅 Go to Habit Tracker</a>
+            </p>
+        </header>
+
+        <!-- 페이지 안 내비 (3개 섹션) -->
+        <nav class="lab-nav">
+            <ul>
+                <li><a href="#life">Life Logging</a></li>
+                <li><a href="#music">Music</a></li>
+                <li><a href="#food">Eating</a></li>
+            </ul>
+        </nav>
+
+        <main>
+
+            <!-- Photograph 섹션 -->
+            <section id="life" class="section section-photo">
+                <h2>Life Logging</h2>
+                <p>I love capturing everyday moments through photos & videos to preserve memories.</p>
+                <p>I have my own Youtube channel where I upload vlogs and travel diaries.</p>
+
+                <div class="photo-grid">
+                    <img src="img/life1.jpeg" alt="Sample photo 1">
+                    <img src="img/life2.jpeg" alt="Sample photo 2">
+                    <img src="img/life3.jpeg" alt="Sample photo 3">
+                </div>
+                <div class="video-container">
+                <iframe width="560" height="315" 
+                src="https://www.youtube-nocookie.com/embed/ZBHpP56pjoY?si=KP9iWBpXahGG5E_T" 
+                title="YouTube video player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerpolicy="strict-origin-when-cross-origin" 
+                allowfullscreen></iframe>
+                </div>
+            </section>
+
+            <!-- Music 섹션 -->
+            <section id="music" class="section section-music">
+                <h2>Music</h2>
+                <p>Music is my life. I enjoy singing, playing violin and piano.</p>
+                <p>I love participating in music project. I once participated in a choir singing in general conference,</p>
+                <p>and participating in recording children hymns.</p>
+
+                <div class="photo-grid">
+                    <img src="img/music1.jpeg" alt="Music photo 1">
+                    <img src="img/music2.jpeg" alt="Music photo 2">
+                </div>
+            </section>
+
+            <!-- Cooking 섹션 -->
+            <section id="food" class="section section-cooking">
+                <h2>Eating</h2>
+                <p>
+                    Eating is one of my favorite hobbies!
+                    I love trying new foods and exploring different cuisines.
+                </p>
+                <p>But if you ask me my favorite food, I would say...</p>
+              
+                <ol>
+                  <li>
+                    Sushi
+                    <ul>
+                      <li>Salmon Nigiri</li>
+                      <li>Halibut Nigiri</li>
+                    </ul>
+                  </li>
+                  <li>Tteokbokki</li>
+                  <li>Hot Pot</li>
+                  <li>Phad Thai</li>
+                  <li>
+                    Ice cream
+                    <ul>
+                      <li>Mint Chocolate Chip – Natuur</li>
+                      <li>Chocolate – Häagen-Dazs</li>
+                      <li>Brownie Batter – Tillamook</li>
+                    </ul>
+                  </li>
+                </ol>
+
+                <div class="photo-grid">
+                    <img src="img/food1.jpeg" alt="Food photo 1">
+                    <img src="img/food2.jpeg" alt="Food photo 2">
+                    <img src="img/food3.jpeg" alt="Food photo 3">
+                </div>
+            </section>
+
+            <section id="viz" class="section section-viz">
+              <h2>Fun Data</h2>
+              <div class='tableauPlaceholder' id='viz1765322913419' 
+              style='position: relative'><noscript><a href='#'><img alt='Protein by food '
+                src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Pr&#47;ProteinIntakebycost&#47;Proteinbyfood&#47;1_rss.png' 
+                style='border: none' /></a></noscript><object class='tableauViz'  
+                style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> 
+                <param name='embed_code_version' value='3' /> <param name='site_root' value='' />
+                <param name='name' value='ProteinIntakebycost&#47;Proteinbyfood' /><param name='tabs' value='no' />
+                <param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Pr&#47;ProteinIntakebycost&#47;Proteinbyfood&#47;1.png' /> 
+                <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' />
+                <param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' />
+                <param name='language' value='en-US' /></object></div>                
+                <script type='text/javascript'>                    
+                var divElement = document.getElementById('viz1765322913419');                    
+                var vizElement = divElement.getElementsByTagName('object')[0];                    
+                vizElement.style.width='100%';
+                vizElement.style.height='600px';                    
+                var scriptElement = document.createElement('script');                    
+                scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    
+                vizElement.parentNode.insertBefore(scriptElement, vizElement);                
+                </script>
+            </section>
+
+
+        </main>
+
+        <footer class="footer">
+            <a href="#top">Back to top ↑</a>
+        </footer>
+
+    </div>
+
+</body>
+</html>
